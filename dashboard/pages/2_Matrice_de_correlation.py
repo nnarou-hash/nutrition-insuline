@@ -23,7 +23,7 @@ st.info(
 mat = pd.read_csv(DATA / "matrice_correlation.csv")
 
 debut, fin = st.select_slider(
-    "Tranches d'âge retenues",
+    "Tranches d'âge retenues (valable pour les deux matrices)",
     options=BANDES,
     value=(BANDES[0], BANDES[-1]),
 )
@@ -33,24 +33,32 @@ st.caption(
     "individuelle n'est publiée."
 )
 
-col_femmes, col_hommes = st.columns(2)
-for colonne, sexe in [(col_femmes, "Femme"), (col_hommes, "Homme")]:
-    d = mat[(mat["sexe"] == sexe) & (mat["bande_debut"] == debut) & (mat["bande_fin"] == fin)]
-    with colonne:
-        st.subheader(f"{sexe}s" if sexe == "Femme" else "Hommes")
-        if d.empty:
-            st.write("Aucune donnée pour cette plage.")
-            continue
-        ordre = d["variable_x"].drop_duplicates().tolist()
-        m = d.pivot(index="variable_x", columns="variable_y", values="correlation")
-        m = m.reindex(index=ordre, columns=ordre)
-        st.caption(f"{int(d['n_groupe'].iloc[0])} participants dans cette plage.")
-        fig = px.imshow(
-            m, zmin=-1, zmax=1, color_continuous_scale="RdBu_r",
-            text_auto=".2f", aspect="auto",
-        )
-        fig.update_layout(height=620, xaxis_title=None, yaxis_title=None)
-        st.plotly_chart(fig)
-        with st.expander("Effectif de chaque paire"):
-            n_pairs = d.pivot(index="variable_x", columns="variable_y", values="n")
-            st.dataframe(n_pairs.reindex(index=ordre, columns=ordre))
+
+def bloc(sexe, titre):
+    d = mat[
+        (mat["sexe"] == sexe)
+        & (mat["bande_debut"] == debut)
+        & (mat["bande_fin"] == fin)
+    ]
+    st.header(titre)
+    if d.empty:
+        st.write("Aucune donnée pour cette plage.")
+        return
+    ordre = d["variable_x"].drop_duplicates().tolist()
+    m = d.pivot(index="variable_x", columns="variable_y", values="correlation")
+    m = m.reindex(index=ordre, columns=ordre)
+    st.caption(f"{int(d['n_groupe'].iloc[0])} participants dans cette plage.")
+    fig = px.imshow(
+        m, zmin=-1, zmax=1, color_continuous_scale="RdBu_r",
+        text_auto=".2f", aspect="auto",
+    )
+    fig.update_layout(height=650, xaxis_title=None, yaxis_title=None)
+    st.plotly_chart(fig)
+    with st.expander("Effectif de chaque paire"):
+        n_pairs = d.pivot(index="variable_x", columns="variable_y", values="n")
+        st.dataframe(n_pairs.reindex(index=ordre, columns=ordre))
+
+
+bloc("Femme", "Femmes")
+st.divider()
+bloc("Homme", "Hommes")
