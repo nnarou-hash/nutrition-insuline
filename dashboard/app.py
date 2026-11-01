@@ -5,6 +5,7 @@ import plotly.express as px
 import streamlit as st
 
 DATA = Path(__file__).parent / "exports"
+SEUIL_PETIT_EFFECTIF = 50
 
 st.set_page_config(page_title="NHANES : qualité des données", layout="wide")
 st.title("NHANES 2021-2023 : qualité des données et HOMA-IR")
@@ -13,14 +14,34 @@ st.warning(
     "sans lien de cause, sans conclusion clinique et sans conseil de santé."
 )
 
-motifs = pd.read_csv(DATA / "motifs_exclusion.csv")
-manquants = pd.read_csv(DATA / "valeurs_manquantes.csv")
-homa = pd.read_csv(DATA / "homa_par_activite.csv")
-resume = pd.read_csv(DATA / "resume.csv")
 
-tab1, tab2 = st.tabs(["Qualité des données", "Association descriptive"])
+def charger(nom):
+    return pd.read_csv(DATA / f"{nom}.csv")
+
+
+def barres_homa(df, x, titre, couleur=None):
+    d = df.copy()
+    d["haut"] = d["homa_q3"] - d["homa_mediane"]
+    d["bas"] = d["homa_mediane"] - d["homa_q1"]
+    fig = px.bar(
+        d, x=x, y="homa_mediane", color=couleur, barmode="group",
+        error_y="haut", error_y_minus="bas", text="n", title=titre,
+    )
+    fig.update_layout(xaxis_title=None, yaxis_title="HOMA-IR (médiane)")
+    st.plotly_chart(fig)
+    if (d["n"] < SEUIL_PETIT_EFFECTIF).any():
+        st.caption(
+            f"Attention : au moins un groupe a moins de {SEUIL_PETIT_EFFECTIF} "
+            "participants (le nombre est affiché sur chaque barre) : lecture fragile."
+        )
+    with st.expander("Voir le tableau"):
+        st.dataframe(d.drop(columns=["haut", "bas"]), hide_index=True)
+
+
+tab1, tab2, tab3 = st.tabs(["Qualité des données", "Facteurs associés", "Limites"])
 
 with tab1:
+    motifs = charger("motifs_exclusion")
     total = int(motifs["n"].sum())
     retenus = int(motifs.loc[motifs["motif"] == "Retenus pour le HOMA-IR", "n"].sum())
     c1, c2, c3 = st.columns(3)
@@ -35,36 +56,54 @@ with tab1:
     st.plotly_chart(fig)
 
     st.subheader("Valeurs manquantes parmi les adultes retenus")
+    manquants = charger("valeurs_manquantes")
     fig2 = px.bar(manquants, x="variable", y="pct_manquants", text="pct_manquants")
     fig2.update_layout(xaxis_title=None, yaxis_title="% de valeurs manquantes")
     st.plotly_chart(fig2)
-    st.dataframe(manquants, hide_index=True)
+
+    st.subheader("Part d'adultes retenus selon l'âge et le sexe")
+    qualite = charger("qualite_retenus_par_groupe")
+    fig3 = px.bar(
+        qualite, x="groupe_age", y="pct_retenus", color="groupe_sexe",
+        barmode="group", text="pct_retenus",
+    )
+    fig3.update_layout(xaxis_title=None, yaxis_title="% retenus parmi les adultes examinés")
+    st.plotly_chart(fig3)
+    st.caption("La tranche 70 ans et plus inclut les 80 ans et plus (âge plafonné à 80).")
 
 with tab2:
-    adultes = int(resume["adultes_retenus"].iloc[0])
-    inconnue = int(resume["activite_inconnue"].iloc[0])
-    c1, c2 = st.columns(2)
-    c1.metric("Adultes retenus", adultes)
-    c2.metric("Activité physique inconnue", inconnue)
-
-    st.subheader("HOMA-IR par niveau d'activité de loisir déclaré")
-    st.caption(
-        "Activité = modérée + intense, en minutes par semaine, ramenée depuis "
-        "l'unité déclarée. Barres : médiane. Traits : 1er et 3e quartiles."
-    )
-    homa["haut"] = homa["homa_q3"] - homa["homa_mediane"]
-    homa["bas"] = homa["homa_mediane"] - homa["homa_q1"]
-    fig3 = px.bar(
-        homa, x="groupe_activite", y="homa_mediane",
-        error_y="haut", error_y_minus="bas", text="n",
-    )
-    fig3.update_layout(xaxis_title=None, yaxis_title="HOMA-IR (médiane)")
-    st.plotly_chart(fig3)
-    st.dataframe(
-        homa[["groupe_activite", "n", "homa_q1", "homa_mediane", "homa_q3"]],
-        hide_index=True,
-    )
     st.info(
-        "Une association dans cet échantillon n'est ni une cause ni un conseil. "
-        "Les valeurs décrivent ces participants, pas la population américaine."
+        "Chaque barre montre la médiane du HOMA-IR du groupe, avec les 1er et 3e "
+        "quartiles en traits. Ce sont des associations dans cet échantillon : "
+        "les facteurs sont liés entre eux et rien ici ne montre une cause."
+    )
+    barres_homa(charger("homa_par_imc"), "groupe_imc", "Par catégorie d'IMC")
+
+    tt = charger("homa_par_tour_taille")
+    tt["quartile_tour_taille"] = "Quartile " + tt["quartile_tour_taille"].astype(str)
+    barres_homa(tt, "quartile_tour_taille", "Par quartile de tour de taille, selon le sexe", "groupe_sexe")
+
+    barres_homa(charger("homa_par_age_sexe"), "groupe_age", "Par tranche d'âge, selon le sexe", "groupe_sexe")
+    barres_homa(charger("homa_sexe_par_imc"), "groupe_imc", "Par catégorie d'IMC, selon le sexe", "groupe_sexe")
+    barres_homa(charger("homa_par_activite"), "groupe_activite", "Par niveau d'activité physique de loisir déclarée")
+    barres_homa(charger("homa_par_intensite"), "groupe_intensite", "Par intensité de l'activité de loisir")
+    barres_homa(charger("homa_par_sedentarite"), "groupe_sedentarite", "Par temps passé assis")
+    barres_homa(
+        charger("homa_activite_par_imc"), "groupe_imc",
+        "Activité de loisir à IMC comparable", "groupe_activite",
+    )
+
+with tab3:
+    resume = charger("resume")
+    st.metric("Adultes retenus", int(resume["adultes_retenus"].iloc[0]))
+    st.markdown(
+        """
+- Les chiffres décrivent cet échantillon, pas la population américaine.
+- Les poids de sondage sont conservés dans la table mais ne sont pas utilisés.
+- Ces données ne suivent pas les mêmes personnes dans le temps : elles ne peuvent pas montrer ce qui fait varier le HOMA-IR.
+- L'activité physique est celle de loisir, déclarée.
+- Les seuils de catégories (IMC, temps assis, quartiles) sont des choix du projet, pas des normes.
+- L'approximation du HOMA-IR utilisée date de 1985 et n'est pas recalibrée pour les dosages actuels.
+- Référence : Matthews DR et al., Diabetologia 1985;28(7):412-419, https://doi.org/10.1007/BF00280883
+        """
     )

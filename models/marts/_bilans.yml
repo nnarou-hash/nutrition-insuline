@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: mart_participants_bilans
+    description: >
+      Un participant examiné par ligne : HOMA-IR et mesures de laboratoire
+      (cholestérol, triglycérides, hémoglobine glyquée, hémoglobine). Sert à
+      vérifier que le HOMA-IR varie de façon cohérente avec d'autres mesures.
+      Ce n'est pas un outil de classement médical.
+    columns:
+      - name: participant_id
+        description: "Identifiant du participant (seqn)."
+        tests:
+          - unique
+          - not_null

@@ -20,3 +20,13 @@ sources:
         description: "Questionnaire d'activité physique déclarée."
       - name: fastqx_l
         description: "Questionnaire de jeûne : durée de jeûne déclarée avant la prise de sang."
+      - name: hdl_l
+        description: "Cholestérol HDL (laboratoire)."
+      - name: tchol_l
+        description: "Cholestérol total (laboratoire)."
+      - name: trigly_l
+        description: "Triglycérides et cholestérol LDL (laboratoire)."
+      - name: ghb_l
+        description: "Hémoglobine glyquée (laboratoire)."
+      - name: cbc_l
+        description: "Numération sanguine, dont l'hémoglobine (laboratoire)."

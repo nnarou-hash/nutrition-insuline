@@ -8,7 +8,7 @@ PROJECT = "nutrition-homa-nn"
 DATASET = "nhanes_raw"
 LOCATION = "EU"
 RAW_DIR = Path(__file__).resolve().parent.parent / "data" / "raw"
-FILES = ["DEMO_L", "BMX_L", "INS_L", "GLU_L", "PAQ_L", "FASTQX_L"]
+FILES = ["DEMO_L", "BMX_L", "INS_L", "GLU_L", "PAQ_L", "FASTQX_L", "HDL_L", "TRIGLY_L", "TCHOL_L", "GHB_L", "CBC_L"]
 
 client = bigquery.Client(project=PROJECT, location=LOCATION)
 
