@@ -16,7 +16,7 @@ Peut-on calculer un indice HOMA-IR fiable à partir de NHANES ? Quelles règles 
 fichiers .xpt (CDC) -> BigQuery nhanes_raw -> staging (11 vues) -> marts (2 tables) -> dashboard Streamlit
 ```
 
-![Lignage dbt](docs/lineage.png)
+![Lignage dbt](docs/dbt-dag.png)
 
 | Couche | Contenu |
 |---|---|
