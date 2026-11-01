@@ -113,3 +113,24 @@ models:
         description: "Heures de jeûne déclarées."
       - name: jeune_minutes
         description: "Minutes de jeûne déclarées (en plus des heures)."
+
+  - name: stg_bmx
+    description: "Mesures corporelles de l'examen (poids, taille, IMC, tour de taille). Inclut les enfants : à restreindre aux adultes pour les analyses."
+    columns:
+      - name: participant_id
+        description: "Identifiant du participant (seqn)."
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_demo')
+                field: participant_id
+      - name: poids_kg
+        description: "Poids en kg. Vide si non mesuré."
+      - name: taille_cm
+        description: "Taille en cm. Vide si non mesurée."
+      - name: imc
+        description: "Indice de masse corporelle (kg/m²). Vide si non calculé."
+      - name: tour_taille_cm
+        description: "Tour de taille en cm. Vide si non mesuré."
