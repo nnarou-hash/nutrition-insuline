@@ -11,7 +11,8 @@ with base as (
         struct('LDL' as mesure, ldl as valeur),
         struct('Triglycérides' as mesure, triglycerides as valeur),
         struct('Hémoglobine glyquée' as mesure, hba1c as valeur),
-        struct('Hémoglobine' as mesure, hemoglobine as valeur)
+        struct('Hémoglobine' as mesure, hemoglobine as valeur),
+        struct('Ferritine' as mesure, ferritine as valeur)
     ]) as m
     where motif_exclusion is null
       and homa_ir is not null

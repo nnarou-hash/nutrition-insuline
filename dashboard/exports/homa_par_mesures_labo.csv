@@ -7,6 +7,10 @@ Cholestérol total,Homme,1,324,62.0,148.0,2.82
 Cholestérol total,Homme,2,324,148.0,177.0,2.73
 Cholestérol total,Homme,3,324,177.0,208.0,2.62
 Cholestérol total,Homme,4,324,208.0,393.0,2.44
+Ferritine,Femme,1,158,3.8,22.4,2.01
+Ferritine,Femme,2,158,22.4,45.7,1.93
+Ferritine,Femme,3,158,46.2,87.2,2.32
+Ferritine,Femme,4,158,87.3,586.0,2.33
 HDL,Femme,1,397,24.0,48.0,3.61
 HDL,Femme,2,396,48.0,57.0,2.57
 HDL,Femme,3,396,57.0,67.0,1.85

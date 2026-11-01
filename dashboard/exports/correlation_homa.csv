@@ -1,0 +1,18 @@
+mesure,groupe_sexe,n,correlation_spearman
+Cholestérol total,Femme,1585,-0.09
+Cholestérol total,Homme,1296,-0.05
+Ferritine,Femme,632,0.08
+HDL,Femme,1585,-0.45
+HDL,Homme,1296,-0.43
+Hémoglobine,Femme,1580,0.1
+Hémoglobine,Homme,1291,0.05
+Hémoglobine glyquée,Femme,1585,0.41
+Hémoglobine glyquée,Homme,1295,0.41
+IMC,Femme,1566,0.6
+IMC,Homme,1286,0.62
+LDL,Femme,1575,-0.05
+LDL,Homme,1272,-0.05
+Tour de taille,Femme,1514,0.62
+Tour de taille,Homme,1256,0.63
+Triglycérides,Femme,1585,0.44
+Triglycérides,Homme,1294,0.44
