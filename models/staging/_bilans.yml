@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: stg_hdl
-    description: "Cholestérol HDL (laboratoire, fichier CDC HDL_L). Unité probable : mg/dL, à confirmer dans le codebook."
+    description: "Cholestérol HDL (laboratoire, fichier CDC HDL_L). Unité : mg/dL (codebook CDC)."
     columns:
       - name: participant_id
         description: "Identifiant du participant (seqn)."
@@ -17,7 +17,7 @@ models:
         description: "Cholestérol HDL."
 
   - name: stg_tchol
-    description: "Cholestérol total (laboratoire, fichier CDC TCHOL_L). Unité probable : mg/dL, à confirmer dans le codebook."
+    description: "Cholestérol total (laboratoire, fichier CDC TCHOL_L). Unité : mg/dL (codebook CDC)."
     columns:
       - name: participant_id
         description: "Identifiant du participant (seqn)."
@@ -32,7 +32,7 @@ models:
         description: "Cholestérol total."
 
   - name: stg_trigly
-    description: "Triglycérides et LDL (laboratoire, fichier CDC TRIGLY_L). Unités probables : mg/dL, à confirmer dans le codebook. Le fichier contient trois versions du LDL, seule la première (lbdldl) est conservée."
+    description: "Triglycérides et LDL (laboratoire, fichier CDC TRIGLY_L). Unités : mg/dL (codebook CDC). Le fichier contient trois méthodes de calcul du LDL (Friedewald, Martin-Hopkins, NIH équation 2) ; seule la méthode de Friedewald (lbdldl) est conservée."
     columns:
       - name: participant_id
         description: "Identifiant du participant (seqn)."
@@ -46,10 +46,10 @@ models:
       - name: triglycerides
         description: "Triglycérides (colonne lbxtlg). Valeurs extrêmes possibles (maximum observé : 1 745)."
       - name: ldl
-        description: "Cholestérol LDL (colonne lbdldl)."
+        description: "Cholestérol LDL, méthode de Friedewald (colonne lbdldl)."
 
   - name: stg_ghb
-    description: "Hémoglobine glyquée (laboratoire, fichier CDC GHB_L). Unité probable : pourcentage, à confirmer dans le codebook."
+    description: "Hémoglobine glyquée (laboratoire, fichier CDC GHB_L). Unité : pourcentage (codebook CDC)."
     columns:
       - name: participant_id
         description: "Identifiant du participant (seqn)."
@@ -64,7 +64,7 @@ models:
         description: "Hémoglobine glyquée."
 
   - name: stg_cbc
-    description: "Numération sanguine (fichier CDC CBC_L), ici seulement l'hémoglobine. Unité probable : g/dL, à confirmer dans le codebook."
+    description: "Numération sanguine (fichier CDC CBC_L), ici seulement l'hémoglobine. Unité : g/dL (codebook CDC)."
     columns:
       - name: participant_id
         description: "Identifiant du participant (seqn)."
@@ -77,3 +77,17 @@ models:
                 field: participant_id
       - name: hemoglobine
         description: "Hémoglobine."
+  - name: stg_ferritine
+    description: "Ferritine (laboratoire, fichier CDC FERTIN_L), mesurée sur un sous-échantillon. Unité : ng/mL (codebook CDC)."
+    columns:
+      - name: participant_id
+        description: "Identifiant du participant (seqn)."
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_demo')
+                field: participant_id
+      - name: ferritine
+        description: "Ferritine en ng/mL (colonne lbxfer)."

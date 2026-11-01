@@ -30,3 +30,5 @@ sources:
         description: "Hémoglobine glyquée (laboratoire)."
       - name: cbc_l
         description: "Numération sanguine, dont l'hémoglobine (laboratoire)."
+      - name: fertin_l
+        description: "Ferritine (laboratoire), mesurée sur un sous-échantillon."
