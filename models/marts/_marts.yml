@@ -14,10 +14,50 @@ models:
         tests:
           - unique
           - not_null
-      - name: homa_ir
-        description: "Indice HOMA-IR calculé quand insuline et glycémie à jeun sont disponibles."
+      - name: sexe_code
+        description: "Sexe déclaré : 1 = homme, 2 = femme."
+      - name: age_annees
+        description: "Âge en années au dépistage. Plafonné à 80 (80 = 80 ans et plus)."
+      - name: grossesse_code
+        description: "Statut de grossesse (femmes de 20 à 44 ans) : 1 = enceinte, 2 = non enceinte, 3 = indéterminé. Vide hors cible."
+      - name: niveau_education_code
+        description: "Niveau d'éducation des 20 ans et plus (1 à 5). Vide si hors cible ou si ne sait pas."
+      - name: ratio_revenu_seuil_pauvrete
+        description: "Ratio revenu du foyer / seuil de pauvreté. Plafonné à 5."
+      - name: poids_kg
+        description: "Poids en kg."
+      - name: taille_cm
+        description: "Taille en cm."
+      - name: imc
+        description: "Indice de masse corporelle (kg/m²)."
+      - name: tour_taille_cm
+        description: "Tour de taille en cm."
+      - name: poids_sondage_jeun
+        description: "Poids de sondage du sous-échantillon à jeun. 0 = ne répond pas au critère officiel du CDC (jeûne de 8 h à moins de 24 h)."
+      - name: insuline_uu_ml
+        description: "Insuline à jeun en uU/mL."
+      - name: insuline_code_limite_detection
+        description: "0 = résultat détectable, 1 = sous la limite de détection (valeur imputée)."
+      - name: glycemie_mg_dl
+        description: "Glycémie à jeun en mg/dL."
       - name: jeune_heures_total
         description: "Durée de jeûne en heures (heures + minutes / 60)."
+      - name: moderee_frequence
+        description: "Fréquence d'activité physique modérée, dans l'unité moderee_unite."
+      - name: moderee_unite
+        description: "Unité de la fréquence modérée : D = jour, W = semaine, M = mois, Y = année."
+      - name: moderee_minutes
+        description: "Minutes par séance d'activité modérée."
+      - name: intense_frequence
+        description: "Fréquence d'activité physique intense, dans l'unité intense_unite."
+      - name: intense_unite
+        description: "Unité de la fréquence intense : D = jour, W = semaine, M = mois, Y = année."
+      - name: intense_minutes
+        description: "Minutes par séance d'activité intense."
+      - name: sedentaire_minutes
+        description: "Minutes passées assis lors d'une journée habituelle (hors sommeil)."
+      - name: homa_ir
+        description: "Indice HOMA-IR calculé quand insuline et glycémie à jeun sont disponibles (glycémie mg/dL x insuline uU/mL / 405)."
       - name: motif_exclusion
         description: "Premier motif d'exclusion de l'analyse. Vide si le participant est retenu."
         tests:
