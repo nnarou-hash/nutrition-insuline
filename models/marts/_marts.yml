@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: mart_participants
+    description: >
+      Un participant examiné par ligne (8 860). Jointure des 6 tables de staging
+      et calcul du HOMA-IR (glycémie mg/dL x insuline uU/mL / 405, formule
+      classique de la littérature, à citer). motif_exclusion est vide pour les
+      adultes retenus pour l'analyse ; sinon, il donne le premier motif
+      d'exclusion rencontré.
+    columns:
+      - name: participant_id
+        description: "Identifiant du participant (seqn)."
+        tests:
+          - unique
+          - not_null
+      - name: homa_ir
+        description: "Indice HOMA-IR calculé quand insuline et glycémie à jeun sont disponibles."
+      - name: jeune_heures_total
+        description: "Durée de jeûne en heures (heures + minutes / 60)."
+      - name: motif_exclusion
+        description: "Premier motif d'exclusion de l'analyse. Vide si le participant est retenu."
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - 'moins de 18 ans'
+                  - 'insuline ou glycemie manquante'
+                  - 'grossesse ou statut indetermine'
+                  - 'duree de jeune inconnue'
+                  - 'jeune hors 8h a moins de 24h'

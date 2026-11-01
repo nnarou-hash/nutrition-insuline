@@ -76,8 +76,12 @@ models:
       - name: insuline_pmol_l
         description: "Insuline à jeun en pmol/L. Vide si non mesurée."
       - name: insuline_code_limite_detection
-        description: "Code de limite de détection (0 ou 1), à vérifier dans la documentation INS_L."
-
+        description: "Code de limite de détection : 0 = résultat détectable, 1 = sous la limite de détection (0,5 uU/mL). Dans ce cas, la valeur d'insuline est une valeur imputée (limite / racine de 2)."
+        tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+                quote: false
   - name: stg_glu
     description: "Glycémie plasmatique à jeun, sous-échantillon à jeun uniquement."
     columns:
@@ -134,3 +138,45 @@ models:
         description: "Indice de masse corporelle (kg/m²). Vide si non calculé."
       - name: tour_taille_cm
         description: "Tour de taille en cm. Vide si non mesuré."
+
+  - name: stg_paq
+    description: >
+      Activité physique de loisir déclarée (adultes de 18 ans et plus).
+      Les codes refus (7777) et ne sait pas (9999) sont recodés en vide,
+      avec un indicateur pour garder la trace.
+    columns:
+      - name: participant_id
+        description: "Identifiant du participant (seqn)."
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_demo')
+                field: participant_id
+      - name: moderee_frequence
+        description: "Nombre de fois où le participant pratique une activité modérée, dans l'unité de moderee_unite."
+      - name: moderee_unite
+        description: "Unité de la fréquence modérée : D = jour, W = semaine, M = mois, Y = année. Vide si non posée."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['D', 'W', 'M', 'Y']
+      - name: moderee_minutes
+        description: "Minutes par séance d'activité modérée."
+      - name: intense_frequence
+        description: "Nombre de fois où le participant pratique une activité intense, dans l'unité de intense_unite."
+      - name: intense_unite
+        description: "Unité de la fréquence intense : D = jour, W = semaine, M = mois, Y = année. Vide si non posée."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['D', 'W', 'M', 'Y']
+      - name: intense_minutes
+        description: "Minutes par séance d'activité intense."
+      - name: sedentaire_minutes
+        description: "Minutes passées assis lors d'une journée habituelle (hors sommeil)."
+      - name: paq_refus_ou_nsp
+        description: "Vrai si au moins une réponse numérique d'origine était refus (7777) ou ne sait pas (9999)."
+        tests:
+          - not_null
