@@ -78,7 +78,7 @@ models:
       - name: hemoglobine
         description: "Hémoglobine."
   - name: stg_ferritine
-    description: "Ferritine (laboratoire, fichier CDC FERTIN_L), mesurée sur un sous-échantillon. Unité : ng/mL (codebook CDC)."
+    description: "Ferritine (laboratoire, fichier CDC FERTIN_L), mesurée dans cet échantillon uniquement chez des femmes de 18 à 49 ans. Unité : ng/mL (codebook CDC)."
     columns:
       - name: participant_id
         description: "Identifiant du participant (seqn)."
