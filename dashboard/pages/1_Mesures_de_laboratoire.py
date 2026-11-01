@@ -22,7 +22,7 @@ st.subheader("Corrélation avec le HOMA-IR")
 st.caption(
     "Corrélation de rangs (de -1 à +1). Proche de 0 : pas de lien net dans cet "
     "échantillon. Ce n'est ni une cause ni un test statistique. "
-    "La ferritine n'est présente que chez les femmes de cet échantillon."
+    "La ferritine n'est présente que chez des femmes de 18 à 49 ans dans cet échantillon."
 )
 corr = pd.read_csv(DATA / "correlation_homa.csv")
 fig_corr = px.bar(
