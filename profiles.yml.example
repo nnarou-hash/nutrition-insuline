@@ -1,0 +1,10 @@
+nutrition_insuline:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: nutrition-homa-nn
+      dataset: nhanes_staging
+      location: EU
+      threads: 4

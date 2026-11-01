@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: nhanes_raw
+    description: >
+      Fichiers bruts NHANES août 2021 - août 2023 (CDC, suffixe _L), chargés
+      tels quels depuis les fichiers .xpt. Aucun nettoyage à ce niveau.
+    database: nutrition-homa-nn
+    schema: nhanes_raw
+    tables:
+      - name: demo_l
+        description: "Démographie : un participant par ligne (identifiant seqn)."
+      - name: bmx_l
+        description: "Mesures corporelles (examen) : poids, taille, IMC."
+      - name: ins_l
+        description: "Insuline à jeun (laboratoire), sous-échantillon du matin à jeun."
+      - name: glu_l
+        description: "Glycémie plasmatique à jeun (laboratoire), sous-échantillon du matin à jeun."
+      - name: paq_l
+        description: "Questionnaire d'activité physique déclarée."
+      - name: fastqx_l
+        description: "Questionnaire de jeûne : durée de jeûne déclarée avant la prise de sang."

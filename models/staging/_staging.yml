@@ -1,0 +1,115 @@
+version: 2
+
+models:
+  - name: stg_demo
+    description: >
+      Démographie NHANES 2021-2023 nettoyée : un participant par ligne.
+      Les codes "refus" et "ne sait pas" du niveau d'éducation sont recodés
+      en vide, avec un indicateur pour garder la trace.
+    columns:
+      - name: participant_id
+        description: "Identifiant du participant (seqn), clé commune à toutes les tables."
+        tests:
+          - unique
+          - not_null
+      - name: sexe_code
+        description: "Sexe déclaré : 1 = homme, 2 = femme."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2]
+                quote: false
+      - name: age_annees
+        description: "Âge en années au dépistage. Plafonné à 80 (80 = 80 ans et plus)."
+        tests:
+          - not_null
+      - name: a_ete_examine
+        description: "Vrai si le participant a passé l'examen en centre mobile (ridstatr = 2)."
+        tests:
+          - not_null
+      - name: grossesse_code
+        description: >
+          Statut de grossesse à l'examen, femmes de 20 à 44 ans seulement :
+          1 = enceinte, 2 = non enceinte, 3 = indéterminé. Vide hors cible.
+        tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3]
+                quote: false
+      - name: niveau_education_code
+        description: >
+          Niveau d'éducation des 20 ans et plus (1 à 5). Vide si hors cible
+          (moins de 20 ans) ou si "ne sait pas".
+        tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+                quote: false
+      - name: education_refus_ou_nsp
+        description: "Vrai si la réponse d'origine était refus (7) ou ne sait pas (9)."
+        tests:
+          - not_null
+      - name: ratio_revenu_seuil_pauvrete
+        description: "Ratio revenu du foyer / seuil de pauvreté. Plafonné à 5 (5 = 5,00 ou plus)."
+      - name: poids_sondage_examen
+        description: "Poids de sondage de l'examen. 0 = participant non examiné."
+
+  - name: stg_ins
+    description: >
+      Insuline à jeun, sous-échantillon à jeun uniquement. Les zéros mal lus
+      du fichier XPT sont corrigés par la macro clean_zero.
+    columns:
+      - name: participant_id
+        description: "Identifiant du participant (seqn)."
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_demo')
+                field: participant_id
+      - name: poids_sondage_jeun
+        description: "Poids de sondage du sous-échantillon à jeun."
+      - name: insuline_uu_ml
+        description: "Insuline à jeun en uU/mL. Vide si non mesurée."
+      - name: insuline_pmol_l
+        description: "Insuline à jeun en pmol/L. Vide si non mesurée."
+      - name: insuline_code_limite_detection
+        description: "Code de limite de détection (0 ou 1), à vérifier dans la documentation INS_L."
+
+  - name: stg_glu
+    description: "Glycémie plasmatique à jeun, sous-échantillon à jeun uniquement."
+    columns:
+      - name: participant_id
+        description: "Identifiant du participant (seqn)."
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_demo')
+                field: participant_id
+      - name: poids_sondage_jeun
+        description: "Poids de sondage du sous-échantillon à jeun."
+      - name: glycemie_mg_dl
+        description: "Glycémie à jeun en mg/dL. Vide si non mesurée."
+      - name: glycemie_mmol_l
+        description: "Glycémie à jeun en mmol/L. Vide si non mesurée."
+
+  - name: stg_fastqx
+    description: "Questionnaire de jeûne : durée de jeûne déclarée avant la prise de sang."
+    columns:
+      - name: participant_id
+        description: "Identifiant du participant (seqn)."
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_demo')
+                field: participant_id
+      - name: jeune_heures
+        description: "Heures de jeûne déclarées."
+      - name: jeune_minutes
+        description: "Minutes de jeûne déclarées (en plus des heures)."
