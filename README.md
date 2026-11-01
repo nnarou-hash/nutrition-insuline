@@ -31,10 +31,11 @@ fichiers .xpt (CDC) -> BigQuery nhanes_raw -> staging (6 vues) -> mart_participa
 - **Grossesse** : les femmes enceintes et les cas indéterminés sont exclus.
 - **Plausibilité** : bornes volontairement larges sur poids, taille, IMC et tour de taille, et cohérence de l'IMC avec le poids et la taille.
 - **Cohérence fréquence / unité** (activité physique) : une fréquence positive a toujours une unité, une fréquence nulle n'en a jamais.
+- **Tests dbt** sur les clés (unicité, non-nullité), les liens entre tables (`relationships`), les valeurs autorisées (`accepted_values`) et des tests de cohérence écrits sur mesure. Tous passent.
 
 ## Résultat de la sélection
 
-8 860 participants ont été examinés (sur 11 933). Chacun est classé par le **premier** motif d'exclusion rencontré :
+8 860 participants ont été examinés (sur 11 933 dans le fichier de démographie). Chacun est classé par le **premier** motif d'exclusion rencontré :
 
 | Motif | Participants |
 |---|---|
@@ -49,14 +50,15 @@ Les motifs sont exclusifs et appliqués dans cet ordre : un participant n'est co
 
 ## HOMA-IR
 
-`glycémie à jeun (mg/dL) x insuline à jeun (uU/mL) / 405`, formule classique de la littérature. Le CDC ne fournit pas de formule dans la documentation du fichier insuline.
+`glycémie à jeun (mg/dL) x insuline à jeun (uU/mL) / 405`, soit l'approximation courante de la formule d'origine (glycémie en mmol/L x insuline / 22,5), avec la glycémie convertie en mg/dL. Le CDC ne fournit pas de formule dans la documentation du fichier insuline.
 
 ## Limites
 
 - Les chiffres décrivent **cet échantillon**, pas la population américaine : les poids de sondage sont conservés dans la table mais ne sont pas utilisés.
-- Les participants sans critère de jeûne officiel mais avec insuline mesurée ne sont pas repondérés.
+- Les participants hors critère de jeûne officiel mais avec une insuline mesurée ne sont pas repondérés.
 - Le cycle 2021-2023 est le plus récent publié ; le cycle 2025-2027 est en cours de collecte.
 - Les seuils de plausibilité sont des choix du projet, pas des normes.
+- L'approximation du HOMA-IR utilisée ici date de 1985 et n'est pas recalibrée pour les dosages d'insuline actuels (une version HOMA2 existe).
 - Les analyses descriptives (association activité physique / HOMA-IR) ne sont pas encore écrites.
 
 ## Reproduire
@@ -69,6 +71,10 @@ Les motifs sont exclusifs et appliqués dans cet ordre : un participant n'est co
 6. `export DBT_PROFILES_DIR=. && dbt run && dbt test`.
 7. `dbt docs generate && dbt docs serve`.
 
-## Source
+## Source des données
 
 NHANES, National Center for Health Statistics, CDC. Données publiques.
+
+## Références
+
+- Matthews DR, Hosker JP, Rudenski AS, Naylor BA, Treacher DF, Turner RC. Homeostasis model assessment: insulin resistance and β-cell function from fasting plasma glucose and insulin concentrations in man. Diabetologia. 1985;28(7):412-419. https://doi.org/10.1007/BF00280883
