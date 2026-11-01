@@ -12,3 +12,5 @@ data/
 *.csv
 .DS_Store
 .user.yml
+!dashboard/data/*.csv
+!dashboard/exports/*.csv

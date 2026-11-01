@@ -1,0 +1,7 @@
+groupe_sexe,groupe_imc,n,homa_q1,homa_mediane,homa_q3
+Femme,1 - IMC < 25,458,0.93,1.35,1.95
+Femme,2 - IMC 25 à < 30,449,1.43,2.11,3.12
+Femme,3 - IMC ≥ 30,659,2.38,3.49,5.6
+Homme,1 - IMC < 25,343,0.92,1.35,2.0
+Homme,2 - IMC 25 à < 30,447,1.6,2.47,3.83
+Homme,3 - IMC ≥ 30,496,2.81,4.39,6.72

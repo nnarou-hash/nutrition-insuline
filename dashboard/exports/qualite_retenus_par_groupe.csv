@@ -1,0 +1,13 @@
+groupe_sexe,groupe_age,n_adultes_examines,n_retenus,pct_retenus
+Femme,1 - 18 à 29 ans,499,195,39.1
+Femme,2 - 30 à 39 ans,516,215,41.7
+Femme,3 - 40 à 49 ans,452,222,49.1
+Femme,4 - 50 à 59 ans,512,247,48.2
+Femme,5 - 60 à 69 ans,820,408,49.8
+Femme,6 - 70 ans et plus,680,298,43.8
+Homme,1 - 18 à 29 ans,428,172,40.2
+Homme,2 - 30 à 39 ans,389,164,42.2
+Homme,3 - 40 à 49 ans,348,165,47.4
+Homme,4 - 50 à 59 ans,421,190,45.1
+Homme,5 - 60 à 69 ans,659,316,48.0
+Homme,6 - 70 ans et plus,613,290,47.3
