@@ -89,6 +89,11 @@ Ces résultats sont des associations dans cet échantillon, sans test statistiqu
 
 ## Dashboard
 
+Deux restitutions complémentaires sont disponibles :
+
+- **Dashboard HTML statique** : https://nnarou-hash.github.io/nhanes/ — aperçu léger et consultable directement depuis le portfolio, alimenté par les mêmes exports agrégés.
+- **Application Streamlit interactive** : https://nutrition-insuline-nn.streamlit.app — version complète conservée, avec ses trois pages et ses interactions.
+
 Application Streamlit en ligne, alimentée par des CSV **agrégés** (aucune ligne individuelle n'est publiée) :
 
 - page principale : qualité des données, facteurs associés, limites ;
