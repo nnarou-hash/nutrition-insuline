@@ -14,6 +14,17 @@ st.warning(
     "sans lien de cause, sans conclusion clinique et sans conseil de santé."
 )
 
+st.info(
+    "**Sources :** données publiques NHANES du CDC, cycle août 2021–août 2023 "
+    "(démographie, mesures corporelles, insuline et glycémie à jeun, activité physique, "
+    "jeûne, lipides, hémoglobine glyquée, hémoglobine et ferritine). "
+    "Les fichiers sources sont préparés dans BigQuery et transformés avec dbt ; "
+    "l’application exploite les exports analytiques agrégés du projet."
+)
+st.caption(
+    "Onglets : règles de qualité et sélection des participants · facteurs descriptivement associés au HOMA-IR · limites et précautions d’interprétation."
+)
+
 
 def charger(nom):
     return pd.read_csv(DATA / f"{nom}.csv")
